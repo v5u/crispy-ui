@@ -4,6 +4,7 @@ import Util from '../utils/util'
 import Application from '@/views/Application'
 import Environment from '@/views/Environment'
 import NotFound from '@/views/NotFound'
+import Test from '@/views/Test'
 
 Vue.use(Router)
 
@@ -21,6 +22,14 @@ const router = new Router({
       component: Application,
       meta: {
         title: '应用列表'
+      }
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test,
+      meta: {
+        title: '测试'
       }
     },
     {

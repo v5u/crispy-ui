@@ -1,138 +1,141 @@
 <template>
 <div>
-    <el-row :gutter="20">
-        <el-col :span="6">
-            <span class="grid-content bg-purple">{{ application.name }}</span>
-            <el-button type="primary" icon="el-icon-edit" circle size="small" @click="updateApplication"></el-button>
-        </el-col>
-        <el-col :span="6">
-            <div class="grid-content bg-purple">
-                启用状态：
-                <el-switch
-                v-model="application.enabler"
-                @change="enableApplication"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-                </el-switch>                
-            </div>
-        </el-col>
-        <el-col :span="6">
-            <div class="grid-content bg-purple">
-                数据加密：
-                <el-switch
-                v-model="application.encryption"
-                @change="encryptApplication"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-                </el-switch>                
-            </div>
-        </el-col>
-        <el-col :span="6">
-            <div class="grid-content bg-purple">
-                引入全局配置：
-                <el-switch
-                v-model="application.includeGlobalConfig"
-                @change="includeGlobalConfigApplication"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-                </el-switch>                
-            </div>
-        </el-col>                        
-    </el-row>
-
-    <el-row>
-      <el-col :span="24">
-        <div>
-            <el-select v-model="environment.id" filterable 
-            placeholder="请选择" size="mini" @change="handleEnvironmentChange"
-            style="width: 100px;">
-                <el-option
-                v-for="env in application.environments"
-                :key="env.item1"
-                :label="env.item2"
-                :value="env.item1">
-                </el-option>
-            </el-select>
-            <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addEnvironment"></el-button>
-            <el-button type="primary" icon="el-icon-edit" circle size="small" @click="updateEnvironment"></el-button>
-            <el-button type="danger" icon="el-icon-minus" circle size="mini" @click="removeEnvironment(environment.name)"></el-button>
-            环境启用状态：
-            <el-switch
-            v-model="environment.enabler"
-            @change="enableEnvironment"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
-            </el-switch>&nbsp;&nbsp;
-            <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addKeyValuePair">添加配置</el-button>
-        </div>          
+  <el-row :gutter="20">
+      <el-col :span="6">
+          <span class="grid-content bg-purple">{{ application.name }}</span>
+          <el-button type="primary" icon="el-icon-edit" circle size="small" @click="updateApplication"></el-button>
       </el-col>
-    </el-row>
+      <el-col :span="6">
+          <div class="grid-content bg-purple">
+              启用状态：
+              <el-switch
+              v-model="application.enabler"
+              @change="enableApplication"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+              </el-switch>                
+          </div>
+      </el-col>
+      <el-col :span="6">
+          <div class="grid-content bg-purple">
+              数据加密：
+              <el-switch
+              v-model="application.encryption"
+              @change="encryptApplication"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+              </el-switch>                
+          </div>
+      </el-col>
+      <el-col :span="6">
+          <div class="grid-content bg-purple">
+              引入全局配置：
+              <el-switch
+              v-model="application.includeGlobalConfig"
+              @change="includeGlobalConfigApplication"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+              </el-switch>                
+          </div>
+      </el-col>                        
+  </el-row>
+
+  <el-row>
+    <el-col :span="24">
+      <div>
+          <el-select v-model="environment.id" filterable 
+          placeholder="请选择" size="mini" @change="handleEnvironmentChange"
+          style="width: 100px;">
+              <el-option
+              v-for="env in application.environments"
+              :key="env.item1"
+              :label="env.item2"
+              :value="env.item1">
+              </el-option>
+          </el-select>
+          <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addEnvironment"></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle size="small" @click="updateEnvironment"></el-button>
+          <el-button type="danger" icon="el-icon-minus" circle size="mini" @click="removeEnvironment(environment.name)"></el-button>
+          环境启用状态：
+          <el-switch
+          v-model="environment.enabler"
+          @change="enableEnvironment"
+          active-color="#13ce66"
+          inactive-color="#ff4949">
+          </el-switch>&nbsp;&nbsp;
+          <el-button type="primary" icon="el-icon-plus" circle size="mini" @click="addKeyValuePair">添加配置</el-button>
+      </div>          
+    </el-col>
+  </el-row>
     
-    <el-row :gutter="20">
-      <el-col :span="1">&nbsp;</el-col>
-      <el-col :span="22">
-        <el-table
-            :data="environment.keyValuePairs"
-            style="width: 100%"
-            :fit="true">
+  <el-row :gutter="20">
+    <el-col :span="1">&nbsp;</el-col>
+    <el-col :span="22">
+      <el-table
+          :data="environment.keyValuePairs"
+          style="width: 100%"
+          :fit="true">
 
-            <el-table-column
-            label="key" header-align="center"
-            width="200">
-            <template slot-scope="scope">
-                <span style="margin-left: 10px" :title="scope.row.description">{{ scope.row.key }}</span>
-            </template>
-            </el-table-column>
+          <el-table-column
+          label="key" header-align="center"
+          width="200">
+          <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top">
+              {{ scope.row.description }}
+              <div slot="reference" class="name-wrapper">
+                  {{ scope.row.key }}
+              </div>
+              </el-popover>
+          </template>
+          </el-table-column>
 
-            <el-table-column
-            label="value" header-align="center"
-            width="200">
-            <template slot-scope="scope">
-                <el-popover trigger="hover" placement="top">
-                {{ scope.row.value }}
-                <div slot="reference" class="name-wrapper">
-                    <el-tag size="medium">鼠标悬浮查看</el-tag>
-                </div>
-                </el-popover>
-            </template>
-            </el-table-column>
+          <el-table-column
+          label="value" header-align="center"
+          width="200">
+          <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top">
+              {{ scope.row.value }}
+              <div slot="reference" class="name-wrapper">
+                  <el-tag size="medium">鼠标悬浮查看</el-tag>
+              </div>
+              </el-popover>
+          </template>
+          </el-table-column>
 
-            <el-table-column
-            label="状态(点击修改)" header-align="center"
-            width="200">
-            <template slot-scope="scope">
-                <el-tag size="medium">{{ scope.row.enabler ? '已启用' : '已禁用' }}</el-tag>
-            </template>
-            </el-table-column>          
-            
-            <el-table-column
-            label="上次修改时间" header-align="center"
-            width="200">
-            <template slot-scope="scope">
-                {{ scope.row.timestamp }}
-            </template>
-            </el-table-column>                
+          <el-table-column
+          label="启用状态" header-align="center"
+          width="200">
+          <template slot-scope="scope">
+              <el-switch
+              v-model="scope.row.enabler"
+              @change="enableKeyValuePair(scope.row.id, scope.row.enabler)"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+              </el-switch>                
+              <!-- <el-tag size="medium">{{ scope.row.enabler ? '已启用' : '已禁用' }}</el-tag> -->
+          </template>
+          </el-table-column>                        
 
-            <el-table-column label="操作" header-align="center" width="220">
-            <template slot-scope="scope">
-                <el-button
-                size="mini"
-                @click="updateKeyValuePair(scope.row)">编辑</el-button>
-                <el-button
-                size="mini"
-                type="info"
-                @click="getKeyValuePairHistories(scope.row)">历史</el-button>
-                <el-button
-                size="mini"
-                type="danger"
-                @click="removeKeyValuePair(scope.row.id, scope.row.key)">删除</el-button>
-            </template>
-            </el-table-column>
+          <el-table-column label="操作" header-align="center" width="220">
+          <template slot-scope="scope">
+              <el-button
+              size="mini"
+              @click="updateKeyValuePair(scope.row)">编辑</el-button>
+              <el-button
+              size="mini"
+              type="info"
+              @click="getKeyValuePairHistories(scope.row)">历史</el-button>
+              <el-button
+              size="mini"
+              type="danger"
+              @click="removeKeyValuePair(scope.row.id, scope.row.key)">删除</el-button>
+          </template>
+          </el-table-column>
 
-        </el-table>              
-      </el-col>
-      <el-col :span="2">&nbsp;</el-col>
-    </el-row>
+      </el-table>
+    </el-col>
+    <el-col :span="2">&nbsp;</el-col>
+  </el-row>
 
   <el-dialog :title="isAdd ? '添加配置' : '修改配置'" :visible.sync="dialogFormVisible" :fullscreen="true">
     <el-form :model="form" :rules="formRules" ref="form" :label-position="'right'">
@@ -140,7 +143,17 @@
         <el-input v-model="form.key" :disabled="!isAdd" clearable></el-input>
       </el-form-item>
       <el-form-item label="Value" :label-width="formLabelWidth" prop="value">
-        <el-input type="textarea" v-model="form.value"></el-input>      
+        <!-- <el-input type="textarea" v-model="form.value"></el-input> -->
+        <MonacoEditor
+        height="300"
+        language="json"
+        theme="vs"        
+        :code="form.value"
+        :options="monacoOptions"
+        @mounted="onMonacoMounted"
+        @codeChange="onMonacoCodeChange"
+        >
+        </MonacoEditor>        
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth" prop="description">
         <el-input type="textarea" v-model="form.description"></el-input>
@@ -152,25 +165,27 @@
     </div>
   </el-dialog>
 
-<el-dialog title="配置历史记录" :visible.sync="dialogTableVisible">
-  <el-table :data="keyValuePairHistories" v-loading="keyValuePairHistoriesLoading" align="left">
-    <el-table-column property="value" label="Value" width="150"></el-table-column>
-    <el-table-column property="dateTimeCreated" label="创建时间" width="200"></el-table-column>
-    <el-table-column label="操作" width="200" align="left">
-      <template slot-scope="scope">        
-        <el-button
-        v-if="scope.$index!=0"
-        size="mini"
-        type="primary"
-        @click="revertKeyValuePairHistories(scope.row)" align="left">回退</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-</el-dialog>
+  <el-dialog title="配置历史记录" :visible.sync="dialogTableVisible">
+    <el-table :data="keyValuePairHistories" v-loading="keyValuePairHistoriesLoading" align="left">
+      <el-table-column property="value" label="Value" width="150"></el-table-column>
+      <el-table-column property="dateTimeCreated" label="创建时间" width="200"></el-table-column>
+      <el-table-column label="操作" width="200" align="left">
+        <template slot-scope="scope">        
+          <el-button
+          v-if="scope.$index!=0"
+          size="mini"
+          type="primary"
+          @click="revertKeyValuePairHistories(scope.row)" align="left">回退</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
 
 </div>
 </template>
 <script>
+import MonacoEditor from "vue-monaco-editor";
+
 export default {
   data() {
     return {
@@ -180,7 +195,11 @@ export default {
       dialogFormVisible: false,
       dialogTableVisible: false,
       keyValuePairHistoriesLoading: true,
-      isAdd: true,      
+      monacoEditor: null,
+      monacoOptions: {
+        selectOnLineNumbers: false
+      },
+      isAdd: true,
       form: {
         environmentId: null,
         id: null,
@@ -191,8 +210,8 @@ export default {
       formRules: {
         key: [
           {
-            requird: true,
-            message: "Key 不能为空",
+            required: true,
+            message: "请输入 Key",
             trigger: "blur"
           },
           { min: 1, max: 50, message: "长度在 1 到 50 个字符", trigger: "blur" }
@@ -406,6 +425,8 @@ export default {
       this.form.value = "";
       this.form.description = "";
       this.dialogFormVisible = true;
+      this.monacoEditor && this.monacoEditor.setValue(this.form.value);
+      this.resetForm();
     },
     updateKeyValuePair(row) {
       this.isAdd = false;
@@ -414,6 +435,8 @@ export default {
       this.form.value = row.value;
       this.form.description = row.description;
       this.dialogFormVisible = true;
+      this.monacoEditor && this.monacoEditor.setValue(this.form.value);
+      this.resetForm();
     },
     addOrUpdateKeyValuePair() {
       if (this.form.id) {
@@ -493,17 +516,29 @@ export default {
             });
         });
     },
+    enableKeyValuePair(id, enabler) {
+      this.$ajax.patch(`/keyvaluepair/${id}/enabler/${enabler}`);
+    },
     handleEnvironmentChange(val) {
       this.environment.id = val;
       this.form.environmentId = val;
       this.getEnvironment();
     },
-    handleEdit(index, row) {
-      console.log(index, row);
+    resetForm() {
+      this.$nextTick(() => {
+        this.$refs["form"].clearValidate();
+      });
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    onMonacoMounted(editor) {
+      this.monacoEditor = editor;
+      this.monacoEditor.setValue(this.form.value);
+    },
+    onMonacoCodeChange(editor) {
+      this.form.value = editor.getValue();
     }
+  },
+  components: {
+    MonacoEditor
   }
 };
 </script>
@@ -511,5 +546,8 @@ export default {
 <style>
 table {
   margin: 0 auto;
+}
+.monaco-editor .view-line {
+  width: auto !important;
 }
 </style>
